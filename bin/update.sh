@@ -13,7 +13,7 @@ docker compose -f docker-compose.prod.yaml build
 echo "Deploying with rolling update..."
 docker compose -f docker-compose.prod.yaml up -d --no-deps --build
 
-echo "Migrating..."
-DB_HOST=localhost bun db:migrate
+# echo "Migrating..."
+# DB_HOST=localhost bun db:migrate
 
 echo "Deployment successful"
