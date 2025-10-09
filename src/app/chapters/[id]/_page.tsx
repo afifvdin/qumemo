@@ -4,7 +4,7 @@ import { DataError } from "@/components/ui/data-error";
 import { DataLoader } from "@/components/ui/data-loader";
 import { useVerses } from "@/services/verses";
 import { useParams, useRouter } from "next/navigation";
-import React, { useEffect, useMemo } from "react";
+import React from "react";
 import { Choice } from "./_components/choice";
 import { Navbar } from "./_components/navbar";
 import { Footer } from "./_components/footer";
@@ -14,7 +14,7 @@ import { StateOptions, StateResult } from "@/types/state";
 
 export default function ChapterUI() {
   const params = useParams<{ id: string }>();
-  const id = params.id;
+  const id = params!.id;
   const router = useRouter();
   const verses = useVerses({ id, enabled: false });
   const [result, setResult] = React.useState<StateResult[]>([]);
@@ -25,19 +25,19 @@ export default function ChapterUI() {
     checked: false,
     correct: false,
   });
-  const correctCount = useMemo(() => {
+  const correctCount = React.useMemo(() => {
     const correct = result.filter((r) => r.correct);
     return correct.length + 1;
   }, [result]);
 
-  const chapter: QuranChapter | null = useMemo(() => {
+  const chapter: QuranChapter | null = React.useMemo(() => {
     if (verses.isFetching || verses.isPending || verses.isError) {
       return null;
     }
     return verses.data.chapter;
   }, [verses.data]);
 
-  const quizes: Quiz = useMemo(() => {
+  const quizes: Quiz = React.useMemo(() => {
     if (verses.isFetching || verses.isPending || verses.isError)
       return { verses: [], quizes: [] };
 
@@ -127,7 +127,7 @@ export default function ChapterUI() {
     });
   };
 
-  useEffect(() => {
+  React.useEffect(() => {
     const numId = Number(id);
     if (numId && numId < 114 && numId > 0) {
       verses.refetch();

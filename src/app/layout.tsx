@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import { Nunito, Noto_Naskh_Arabic } from "next/font/google";
-import "./globals.css";
+import "../styles/globals.css";
 import { ReactQueryProvider } from "@/components/react-query-provider";
 import { Toaster } from "@/components/ui/sonner";
 

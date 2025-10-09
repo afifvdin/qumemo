@@ -1,5 +1,3 @@
-import "server-only";
-
 export const IS_PROD = process.env.NODE_ENV === "production";
 
 export const DB_NAME = process.env.DB_NAME || "";

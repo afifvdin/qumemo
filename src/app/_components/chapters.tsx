@@ -10,20 +10,20 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { useChapters } from "@/services/chapters";
+import { useChapters } from "@/services/fetchers";
 import { useRouter } from "next/navigation";
 import React from "react";
 
 export function ChaptersUI() {
-  const chapters = useChapters({});
+  const chapters = useChapters();
   const router = useRouter();
   const [id, setId] = React.useState(0);
 
-  if (chapters.isPending || chapters.isFetching) {
+  if (chapters.isLoading || chapters.isValidating) {
     return <DataLoader />;
   }
 
-  if (chapters.isError) {
+  if (chapters.error) {
     return <DataError />;
   }
 
@@ -41,7 +41,7 @@ export function ChaptersUI() {
               <SelectValue placeholder="Select your surah/chapter" />
             </SelectTrigger>
             <SelectContent>
-              {chapters.data.map((chapter) => {
+              {chapters.data!.map((chapter) => {
                 return (
                   <SelectItem value={chapter.id.toString()} key={chapter.id}>
                     {chapter.id}. {chapter.name_complex}

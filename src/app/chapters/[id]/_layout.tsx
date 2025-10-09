@@ -12,5 +12,6 @@ export default async function Layout({
   if (!session) {
     redirect("/");
   }
+
   return children;
 }
