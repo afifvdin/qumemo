@@ -8,19 +8,38 @@ const fetcher = async <T>(url: string): Promise<T> => {
 };
 
 export const useChapters = (): SWRResponse<QuranChapter[]> => {
-  return useSWR<QuranChapter[]>("/api/content/chapters", fetcher, {
+  const key = "/api/content/chapters";
+
+  const data = typeof window !== "undefined" ? localStorage.getItem(key) : null;
+  const initialData = data ? JSON.parse(data) : null;
+
+  return useSWR<QuranChapter[]>(key, fetcher, {
     revalidateOnFocus: false,
+    fallbackData: initialData,
+    onSuccess: (data) => {
+      localStorage.setItem(key, JSON.stringify(data));
+    },
   });
 };
 
 export const useVerses = (
   id: string | undefined | null,
 ): SWRResponse<{ chapter: QuranChapter; verses: Verse[] }> => {
+  const key = `/api/content/chapters/${id}/verses`;
+
+  const data = typeof window !== "undefined" ? localStorage.getItem(key) : null;
+  const initialData = data ? JSON.parse(data) : null;
+
   return useSWR<{ chapter: QuranChapter; verses: Verse[] }>(
-    id ? `/api/content/chapters/${id}/verses` : null,
+    id ? key : null,
     fetcher,
     {
       revalidateOnFocus: false,
+      fallbackData: initialData,
+      onSuccess: (data) => {
+        // simpan hasil ke localStorage setiap kali SWR sukses fetch data baru
+        localStorage.setItem(key, JSON.stringify(data));
+      },
     },
   );
 };
